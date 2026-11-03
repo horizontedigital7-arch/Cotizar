@@ -31,6 +31,8 @@ input.bad,select.bad{border-color:var(--neg)}
 .opt input{width:20px;height:20px;accent-color:var(--accent);flex:none}
 .opt:has(input:checked){border-color:var(--accent);background:rgba(212,175,55,.1)}
 .opt small{display:block;color:var(--muted);font-weight:500}
+.opt{align-items:flex-start;padding-block:10px}
+.opt input{margin-top:2px}
 .sub{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line2)}
 .hide{display:none!important}
 .chips{display:flex;flex-wrap:wrap;gap:7px;max-height:190px;overflow:auto;padding:2px 0 8px}
@@ -70,8 +72,15 @@ input.bad,select.bad{border-color:var(--neg)}
         <label class="f"><span>Personas <b class="req">*</b></span><input type="number" id="personas" inputmode="numeric" min="1" max="500" placeholder="Ej.: 20"></label>
         <label class="f"><span>Horas de servicio</span><input type="number" id="horas" inputmode="decimal" min="1" max="12" step="0.5" placeholder="Ej.: 3"></label>
       </div>
-      <label class="f" style="margin:0"><span>Paquete</span>
-        <select id="paquete"><option value="No sé">No sé, recomiéndenme uno</option><option>Básico</option><option>Medio</option><option>Premium</option></select></label>
+      <div class="f" style="margin:0"><span>Paquete</span>
+        <div class="opts" id="paquetes">
+          <label class="opt"><input type="radio" name="paquete" value="No sé" checked><span>No sé, recomiéndenme uno<small>Con tus datos te sugerimos el más adecuado</small></span></label>
+          <label class="opt"><input type="radio" name="paquete" value="Básico"><span><b>Básico</b> · hasta 20 personas · 3 horas<small>Bartender profesional, herramientas de barra, base de limón, azúcar y sal, e hielo. Hasta 3 cócteles por persona. Ideal para reuniones y cumpleaños sencillos.</small></span></label>
+          <label class="opt"><input type="radio" name="paquete" value="Medio"><span><b>Medio</b> · hasta 20 personas · 3 horas<small>Lo mismo que el Básico, con más cócteles: hasta 4 por persona. Para quien quiere más variedad en la carta.</small></span></label>
+          <label class="opt"><input type="radio" name="paquete" value="Premium"><span><b>Premium</b> · hasta 30 personas · 4 horas<small>La experiencia completa: hasta 5 cócteles por persona y una hora más de servicio. Para bodas, quince y eventos grandes.</small></span></label>
+        </div>
+        <small style="display:block;margin-top:8px;color:var(--muted)">El precio final depende de tus datos y de quién pone las bebidas. Te lo enviamos junto con la cotización.</small>
+      </div>
     </div>
 
     <div class="card">
@@ -183,7 +192,7 @@ function buildMessage(d) {
     var picks = COCT.filter(function (n, i) { return sel[i]; }), notas = val('#notas');
     return {
       nombre: val('#nombre'), fecha: $('#fecha').value, lugar: val('#lugar'), personas: val('#personas'), horas: val('#horas'),
-      tipo: $('#tipo').value, paquete: $('#paquete').value, bebidas: b ? b.value : '', aporta: checked('aporta').join(', '),
+      tipo: $('#tipo').value, paquete: (document.querySelector('input[name=paquete]:checked')||{value:'No sé'}).value, bebidas: b ? b.value : '', aporta: checked('aporta').join(', '),
       preferencias: picks.join(', ') + (picks.length && notas ? ' · ' : '') + notas,
       vasos: v ? v.value : '', extras: checked('extras').join(', ')
     };
